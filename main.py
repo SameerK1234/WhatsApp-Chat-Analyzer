@@ -39,6 +39,8 @@ def PreProcessData(data):
     df["Minute"] = df["Date"].dt.minute
     return df
 
+nltk.download('punkt')
+nltk.download('stopwords')
 
 st.title("WhatsApp Chat Analyzer")
 
