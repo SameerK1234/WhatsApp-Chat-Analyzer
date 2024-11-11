@@ -9,6 +9,10 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import seaborn as sns
+
+nltk.download("punkt")
+nltk.download("stopwords")
+
 # Function to preprocess WhatsApp chat data
 def PreProcessData(data):
     pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
@@ -39,8 +43,7 @@ def PreProcessData(data):
     df["Hour"] = df["Date"].dt.hour
     df["Minute"] = df["Date"].dt.minute
     return df
-nltk.download("punkt")
-# nltk.download("stopwords")
+
 st.title("WhatsApp Chat Analyzer")
 
 uploaded_file = st.file_uploader("Upload your WhatsApp chat file (.txt)", type="txt")
