@@ -39,7 +39,8 @@ def PreProcessData(data):
     df["Hour"] = df["Date"].dt.hour
     df["Minute"] = df["Date"].dt.minute
     return df
-
+nltk.download("punkt")
+nltk.download("stopwords")
 st.title("WhatsApp Chat Analyzer")
 
 uploaded_file = st.file_uploader("Upload your WhatsApp chat file (.txt)", type="txt")
