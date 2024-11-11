@@ -11,7 +11,9 @@ from nltk.tokenize import word_tokenize
 import seaborn as sns
 
 nltk.data.path.clear()
-nltk.download("punkt",download_dir='/content/nltk/data/')
+download_dir = '/content/nltk/data/'
+nltk.data.path.append(download_dir)
+nltk.download("punkt", download_dir=download_dir)
 # nltk.download("stopwords")
 
 # Function to preprocess WhatsApp chat data
