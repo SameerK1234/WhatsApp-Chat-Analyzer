@@ -11,6 +11,7 @@ from nltk.tokenize import word_tokenize
 import seaborn as sns
 
 nltk.data.path.clear()
+nltk.download('punkt_tab')
 nltk.download("punkt")
 nltk.download("stopwords")
 
