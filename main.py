@@ -10,7 +10,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import seaborn as sns
 
-# nltk.data.path.clear()
+nltk.data.path.clear()
 # nltk.download("punkt")
 # nltk.download("stopwords")
 
