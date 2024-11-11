@@ -11,7 +11,6 @@ from nltk.tokenize import word_tokenize
 import seaborn as sns
 
 nltk.data.path.clear()
-nltk.download('punkt_tab')
 nltk.download("punkt")
 nltk.download("stopwords")
 
@@ -81,8 +80,8 @@ if uploaded_file is not None:
     tokenizer = word_tokenize(all_test)
     filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
     text = Counter(filtered_words)
-    text.pop("Media")
-    text.pop("omitted")
+    text.pop("Media",None)
+    text.pop("omitted",None)
     word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
     plt.figure(figsize=(12, 6))
     plt.imshow(word_cloud)
