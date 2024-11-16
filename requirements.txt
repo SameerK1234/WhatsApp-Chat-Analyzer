@@ -2,5 +2,5 @@ pandas
 matplotlib
 streamlit 
 wordcloud
-nltk
+nltk==3.9.1
 seaborn
