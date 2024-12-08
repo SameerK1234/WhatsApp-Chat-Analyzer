@@ -81,18 +81,18 @@ if uploaded_file is not None:
     plt.tight_layout()
     st.pyplot(plt)
 
-    st.subheader("Word Cloud")
-    all_test = "".join(df["message"].astype(str))
-    tokenizer = word_tokenize(all_test)
-    filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
-    text = Counter(filtered_words)
-    text.pop("Media",None)
-    text.pop("omitted",None)
-    word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
-    plt.figure(figsize=(12, 6))
-    plt.imshow(word_cloud)
-    plt.axis("off")
-    st.pyplot(plt)
+    # st.subheader("Word Cloud")
+    # all_test = "".join(df["message"].astype(str))
+    # tokenizer = word_tokenize(all_test)
+    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
+    # text = Counter(filtered_words)
+    # text.pop("Media",None)
+    # text.pop("omitted",None)
+    # word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
+    # plt.figure(figsize=(12, 6))
+    # plt.imshow(word_cloud)
+    # plt.axis("off")
+    # st.pyplot(plt)
 
     df['DayOfWeek'] = df['Date'].dt.dayofweek
     heatmap_data = df.groupby(['DayOfWeek', 'Hour']).size().unstack(fill_value=0)
