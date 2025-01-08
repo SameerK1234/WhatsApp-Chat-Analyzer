@@ -5,29 +5,26 @@ import streamlit as st
 from collections import Counter
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import seaborn as sns
-import os
-import nltk
-nltk_data_path = os.path.join(os.getcwd(), 'nltk_data')
-nltk.data.path.append(nltk_data_path)
-nltk.download('punkt', download_dir=nltk_data_path)
-nltk.data.path.clear()
-nltk.download('punkt_tab')
+
+nltk.download("punkt")
 nltk.download("stopwords")
 
-
-
-
 # Function to preprocess WhatsApp chat data
-def PreProcessData(data):
-    pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
-    messages = re.split(pattern, data)[1:]
-    dates = re.findall(pattern, data)
-
-    df = pd.DataFrame({"User Message": messages, "Date": dates})
-    df["Date"] = pd.to_datetime(df["Date"], format='%m/%d/%y, %H:%M - ')
+def PreProcessData(data, os_type):
+    if os_type == "Apple":
+        pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+        dates = re.findall(pattern, data)
+        df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S] ')
+    else:  # Android
+        pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
+        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+        dates = re.findall(pattern, data)
+        df["Date"] = pd.to_datetime(dates, format='%m/%d/%y, %H:%M - ')
 
     users = []
     messages = []
@@ -51,13 +48,15 @@ def PreProcessData(data):
     df["Minute"] = df["Date"].dt.minute
     return df
 
+# Streamlit app
 st.title("WhatsApp Chat Analyzer")
-
+os = st.selectbox("Operating System",["Apple", "Android"])
 uploaded_file = st.file_uploader("Upload your WhatsApp chat file (.txt)", type="txt")
 
 if uploaded_file is not None:
     data = uploaded_file.read().decode("utf-8")
-    df = PreProcessData(data)
+    df = PreProcessData(data, os)
+    df = pd.DataFrame(df)
 
     st.subheader("Number of Messages Over Time")
     message_counts = df.groupby(df["Date"].dt.date).size()
@@ -76,23 +75,10 @@ if uploaded_file is not None:
     user_counts.plot(kind="bar", color="teal")
     plt.xlabel("User")
     plt.ylabel("Number of Messages")
-    plt.title("Top 15 Users by Number of Messages")
+    plt.title("Top 10 Users by Number of Messages")
     plt.xticks(rotation=90)
     plt.tight_layout()
     st.pyplot(plt)
-
-    # st.subheader("Word Cloud")
-    # all_test = "".join(df["message"].astype(str))
-    # tokenizer = word_tokenize(all_test)
-    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
-    # text = Counter(filtered_words)
-    # text.pop("Media",None)
-    # text.pop("omitted",None)
-    # word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
-    # plt.figure(figsize=(12, 6))
-    # plt.imshow(word_cloud)
-    # plt.axis("off")
-    # st.pyplot(plt)
 
     df['DayOfWeek'] = df['Date'].dt.dayofweek
     heatmap_data = df.groupby(['DayOfWeek', 'Hour']).size().unstack(fill_value=0)
@@ -105,25 +91,41 @@ if uploaded_file is not None:
     plt.yticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=0)
     st.pyplot(plt)
 
+     # st.subheader("Word Cloud")
+    # all_test = "".join(df["message"].astype(str))
+    # tokenizer = word_tokenize(all_test)
+    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
+    # text = Counter(filtered_words)
+    # text.pop("Media",None)
+    # text.pop("omitted",None)
+    # word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
+    # plt.figure(figsize=(12, 6))
+    # plt.imshow(word_cloud)
+    # plt.axis("off")
+    # st.pyplot(plt)
+
     import emoji
     st.subheader("Emoji")
     all_test = "".join(df["message"].astype(str))
-    emoji_count={}
+    emoji_count = {}
     for char in all_test:
         if char in emoji.EMOJI_DATA:
             if char in emoji_count:
-                emoji_count[char]+=1
+                emoji_count[char] += 1
             else:
-                emoji_count[char]=1
+                emoji_count[char] = 1
 
-    emoji = Counter(emoji_count)
-    max_emoji = max(emoji.items(),key = lambda x:x[1])
-    # max_emoji = max_emoji.keys()
-    st.subheader(f"Most used emoji is:{max_emoji[0]}")
-    st.subheader(f"Total usage:{max_emoji[1]}")
+    emoji_counter = Counter(emoji_count)
+    max_emoji = max(emoji_counter.items(), key=lambda x: x[1])
+    st.subheader(f"Most used emoji is: {max_emoji[0]}")
+    st.subheader(f"Total usage: {max_emoji[1]}")
 else:
+    st.write("Please upload a WhatsApp chat file to analyze.")
 
-     st.write("Please upload a WhatsApp chat file to analyze.")
+
+   
+
+  
 
 
 
