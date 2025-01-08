@@ -10,10 +10,9 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import seaborn as sns
 
-nltk.download("punkt")
-nltk.download("stopwords")
+# nltk.download("punkt")
+# nltk.download("stopwords")
 
-# Function to preprocess WhatsApp chat data
 def PreProcessData(data, os_type):
     if os_type == "Apple":
         pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
@@ -48,7 +47,7 @@ def PreProcessData(data, os_type):
     df["Minute"] = df["Date"].dt.minute
     return df
 
-# Streamlit app
+
 st.title("WhatsApp Chat Analyzer")
 os = st.selectbox("Operating System",["Apple", "Android"])
 uploaded_file = st.file_uploader("Upload your WhatsApp chat file (.txt)", type="txt")
