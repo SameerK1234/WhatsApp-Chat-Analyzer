@@ -105,7 +105,22 @@ if uploaded_file is not None:
     plt.yticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=0)
     st.pyplot(plt)
 
+    import emoji
+    st.subheader("Emoji")
+    all_test = "".join(df["message"].astype(str))
+    emoji_count={}
+    for char in all_test:
+        if char in emoji.EMOJI_DATA:
+            if char in emoji_count:
+                emoji_count[char]+=1
+            else:
+                emoji_count[char]=1
 
+    emoji = Counter(emoji_count)
+    max_emoji = max(emoji.items(),key = lambda x:x[1])
+    # max_emoji = max_emoji.keys()
+    st.subheader(f"Most used emoji is:{max_emoji[0]}")
+    st.subheader(f"Total usage:{max_emoji[1]}")
 else:
 
      st.write("Please upload a WhatsApp chat file to analyze.")
