@@ -13,8 +13,8 @@ import seaborn as sns
 # nltk.download("punkt")
 # nltk.download("stopwords")
 
-
- def PreProcessData(data, os_type, time_format):
+# Function to preprocess WhatsApp chat data
+def PreProcessData(data, os_type, time_format):
     if os_type == "Apple":
         if time_format == "24 Hours":
             pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
@@ -59,8 +59,8 @@ import seaborn as sns
     df["Day"] = df["Date"].dt.day
     df["Hour"] = df["Date"].dt.hour
     df["Minute"] = df["Date"].dt.minute
-    return df      
-  
+    return df
+
 st.markdown("""
     <div style="text-align: left; font-weight: bold; font-size: 12px;">
         Android - 12 Hour - Txt file format should be day/month/year pm<br>
@@ -70,15 +70,17 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
+
+
+
 st.title("WhatsApp Chat Analyzer")
 os = st.selectbox("Operating System",["Apple", "Android"])
+time_format = st.selectbox("Time Format",["12 Hours","24 Hours"])
 uploaded_file = st.file_uploader("Upload your WhatsApp chat file (.txt)", type="txt")
-
 if uploaded_file is not None:
     data = uploaded_file.read().decode("utf-8")
-    df = PreProcessData(data, os)
-    df = pd.DataFrame(df)
-
+    df = PreProcessData(data,os,time_format)
+    df=pd.DataFrame(df)
     st.subheader("Number of Messages Over Time")
     message_counts = df.groupby(df["Date"].dt.date).size()
     plt.figure(figsize=(12, 6))
@@ -96,10 +98,23 @@ if uploaded_file is not None:
     user_counts.plot(kind="bar", color="teal")
     plt.xlabel("User")
     plt.ylabel("Number of Messages")
-    plt.title("Top 10 Users by Number of Messages")
+    plt.title("Top 15 Users by Number of Messages")
     plt.xticks(rotation=90)
     plt.tight_layout()
     st.pyplot(plt)
+
+    # st.subheader("Word Cloud")
+    # all_test = "".join(df["message"].astype(str))
+    # tokenizer = word_tokenize(all_test)
+    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
+    # text = Counter(filtered_words)
+    # text.pop("Media")
+    # text.pop("omitted")
+    # word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
+    # plt.figure(figsize=(12, 6))
+    # plt.imshow(word_cloud)
+    # plt.axis("off")
+    # st.pyplot(plt)
 
     df['DayOfWeek'] = df['Date'].dt.dayofweek
     heatmap_data = df.groupby(['DayOfWeek', 'Hour']).size().unstack(fill_value=0)
@@ -112,41 +127,24 @@ if uploaded_file is not None:
     plt.yticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=0)
     st.pyplot(plt)
 
-     # st.subheader("Word Cloud")
-    # all_test = "".join(df["message"].astype(str))
-    # tokenizer = word_tokenize(all_test)
-    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
-    # text = Counter(filtered_words)
-    # text.pop("Media",None)
-    # text.pop("omitted",None)
-    # word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
-    # plt.figure(figsize=(12, 6))
-    # plt.imshow(word_cloud)
-    # plt.axis("off")
-    # st.pyplot(plt)
-
     import emoji
     st.subheader("Emoji")
     all_test = "".join(df["message"].astype(str))
-    emoji_count = {}
+    emoji_count={}
     for char in all_test:
         if char in emoji.EMOJI_DATA:
             if char in emoji_count:
-                emoji_count[char] += 1
+                emoji_count[char]+=1
             else:
-                emoji_count[char] = 1
+                emoji_count[char]=1
 
-    emoji_counter = Counter(emoji_count)
-    max_emoji = max(emoji_counter.items(), key=lambda x: x[1])
-    st.subheader(f"Most used emoji is: {max_emoji[0]}")
-    st.subheader(f"Total usage: {max_emoji[1]}")
+    emoji = Counter(emoji_count)
+    max_emoji = max(emoji.items(),key = lambda x:x[1])
+    # max_emoji = max_emoji.keys()
+    st.subheader(f"Most used emoji is:{max_emoji[0]}")
+    st.subheader(f"Total usage:{max_emoji[1]}")
+
+
 else:
-    st.write("Please upload a WhatsApp chat file to analyze.")
 
-
-   
-
-  
-
-
-
+     st.write("Please upload a WhatsApp chat file to analyze.")
