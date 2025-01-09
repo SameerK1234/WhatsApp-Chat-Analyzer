@@ -13,27 +13,31 @@ import seaborn as sns
 # nltk.download("punkt")
 # nltk.download("stopwords")
 
-def PreProcessData(data, os_type):
+def PreProcessData(data, os_type,time_format):
     if os_type == "Apple":
-        pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
-        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
-        dates = re.findall(pattern, data)
-        df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S] ')
-    elif os_type == "Apple":
-        pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
-        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
-        dates = re.findall(pattern, data)
-        df["Date"] = pd.to_datetime(dates, format='[%m/%d/%y, %H:%M:%S] ')
-    elif os_type == "Android":  # Android
-        pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
-        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
-        dates = re.findall(pattern, data)
-        df["Date"] = pd.to_datetime(dates, format='%m/%d/%y, %H:%M - ')
-    elif os_type == "Android":
-        pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
-        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
-        dates = re.findall(pattern, data)
-        df["Date"] = pd.to_datetime(dates, format='%d/%m/%y, %H:%M - ')
+        if time_format=="24 Hours":
+            pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+            df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+            dates = re.findall(pattern, data)
+            df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S] ')
+        if time_format=="12 Hours":
+            pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\s(?:AM|PM)\]\s'
+                
+            df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+            dates = re.findall(pattern, data)
+            df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S %p] ')
+    if os_type == "Android":
+        if time_format == "24 hours":
+            pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+            df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+            dates = re.findall(pattern, data)
+            df["Date"] = pd.to_datetime(dates, format='[%m/%d/%y, %H:%M:%S] ')
+        if time_format == "12 hours":
+            pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+            df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+            dates = re.findall(pattern, data)
+            df["Date"] = pd.to_datetime(dates, format='[%m/%d/%y, %H:%M:%S] ')
+
 
     users = []
     messages = []
