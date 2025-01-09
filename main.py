@@ -61,7 +61,14 @@ import seaborn as sns
     df["Minute"] = df["Date"].dt.minute
     return df      
   
-
+st.markdown("""
+    <div style="text-align: left; font-weight: bold; font-size: 12px;">
+        Android - 12 Hour - Txt file format should be day/month/year pm<br>
+        24 Hour - Txt file format should be day/month/year<br>
+        Apple - 12 Hour Txt file format should be day/month/year PM<br>
+        24 Hour Txt file format should be day/month/year
+    </div>
+""", unsafe_allow_html=True)
 
 st.title("WhatsApp Chat Analyzer")
 os = st.selectbox("Operating System",["Apple", "Android"])
