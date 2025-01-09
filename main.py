@@ -80,7 +80,7 @@ def PreProcessData(data, os_type, time_format):
 
 st.markdown("""
     <div style="text-align: left; font-weight: bold; font-size: 12px;">
-        Android - 12 Hour - Txt file format should have capital AM/PM<br>
+        Android - 12 Hour Txt file format should have capital AM/PM<br>
         Apple - 12 Hour Txt file format should have capital AM/PM<br>
 
     </div>
