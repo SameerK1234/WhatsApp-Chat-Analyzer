@@ -19,11 +19,43 @@ def PreProcessData(data, os_type):
         df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
         dates = re.findall(pattern, data)
         df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S] ')
-    else:  # Android
+    elif os_type == "Apple":
+        pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+        dates = re.findall(pattern, data)
+        df["Date"] = pd.to_datetime(dates, format='[%m/%d/%y, %H:%M:%S] ')
+    elif os_type == "Android":  # Android
         pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
         df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
         dates = re.findall(pattern, data)
         df["Date"] = pd.to_datetime(dates, format='%m/%d/%y, %H:%M - ')
+    elif os_type == "Android":
+        pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
+        df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
+        dates = re.findall(pattern, data)
+        df["Date"] = pd.to_datetime(dates, format='%d/%m/%y, %H:%M - ')
+
+    users = []
+    messages = []
+    for message in df["User Message"]:
+        entry = re.split(r'([\w\W]+?):\s', message)
+        if entry[1:]:
+            users.append(entry[1])
+            messages.append(entry[2])
+        else:
+            users.append('group_notification')
+            messages.append(entry[0])
+    df['user'] = users
+    df['message'] = messages
+    df.drop(columns=["User Message"], inplace=True)
+
+    # Extract datetime components
+    df["Year"] = df["Date"].dt.year
+    df["Month"] = df["Date"].dt.month
+    df["Day"] = df["Date"].dt.day
+    df["Hour"] = df["Date"].dt.hour
+    df["Minute"] = df["Date"].dt.minute
+    return df
 
     users = []
     messages = []
