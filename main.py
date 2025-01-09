@@ -20,7 +20,7 @@ def PreProcessData(data, os_type, time_format):
             pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
-            date_format = ["[%d/%m/%y, %H%M%S] ","[%m/%d/%y, %H:%M:%S] "]
+            date_format = ["[%d/%m/%y, %H%M%S] ","[%d/%m/%y, %H%M] ","[%m/%d/%y, %H:%M:%S] ","[%m/%d/%y, %H%M%S] "]
             for fmt in date_format:
                 df["Date"] = pd.to_datetime(dates, format=fmt,errors="coerce")
                 if not df["Date"].isna().all():
@@ -30,7 +30,7 @@ def PreProcessData(data, os_type, time_format):
 
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
-            date_format = ["[%d/%m/%y, %H%M%S] ","[%m/%d/%y, %H:%M:%S %p] "]
+            date_format = ["[%d/%m/%y, %H%M%S %p] ","[%d/%m/%y, %H:%M:%S %p] ","[%m/%d/%y, %H:%M:%S %p] ","[%m/%d/%y, %H:%M %p] "]
             for fmt in date_format:
                 df["Date"] = pd.to_datetime(dates, format=fmt,errors="coerce")
                 if not df["Date"].isna().all():
@@ -40,7 +40,7 @@ def PreProcessData(data, os_type, time_format):
             pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
-            date_format = ["[%d/%m/%y, %H%M%S] ","[%m/%d/%y, %H:%M:%S] "]
+            date_format = ['%m/%d/%y, %H:%M:%S - ','%m/%d/%y, %H:%M: - ','%d/%m/%y, %H:%M:%S - ','%d/%m/%y, %H:%M - ']
             for fmt in date_format:
                 df["Date"] = pd.to_datetime(dates, format=fmt,errors="coerce")
                 if not df["Date"].isna().all():
@@ -49,11 +49,12 @@ def PreProcessData(data, os_type, time_format):
             pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s(?:am|pm)\s-\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
-            date_format = ["[%d/%m/%y, %H%M%S] ","[%m/%d/%y, %H:%M:%S %p] "]
+            date_format = ['%m/%d/%y, %H:%M:%S %p - ','%m/%d/%y, %H:%M %p - ','%d/%m/%y, %H:%M:%S %p - ','%d/%m/%y, %H:%M %p - ']
             for fmt in date_format:
                 df["Date"] = pd.to_datetime(dates, format=fmt,errors="coerce")
                 if not df["Date"].isna().all():
                     break
+   
 
     users = []
     messages = []
