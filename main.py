@@ -46,7 +46,7 @@ def PreProcessData(data, os_type, time_format):
                 if not df["Date"].isna().all():
                     break
         elif time_format == "12 Hours":
-            pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s(?:am|pm)\s-\s'
+            pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s(?:AM|PM)\s-\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
             date_format = ['%m/%d/%y, %H:%M:%S %p - ','%m/%d/%y, %H:%M %p - ','%d/%m/%y, %H:%M:%S %p - ','%d/%m/%y, %H:%M %p - ']
