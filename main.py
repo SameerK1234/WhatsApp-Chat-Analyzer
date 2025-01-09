@@ -80,10 +80,9 @@ def PreProcessData(data, os_type, time_format):
 
 st.markdown("""
     <div style="text-align: left; font-weight: bold; font-size: 12px;">
-        Android - 12 Hour - Txt file format should be day/month/year pm<br>
-        24 Hour - Txt file format should be day/month/year<br>
-        Apple - 12 Hour Txt file format should be day/month/year PM<br>
-        24 Hour Txt file format should be day/month/year
+        Android - 12 Hour - Txt file format should have capital AM/PM<br>
+        Apple - 12 Hour Txt file format should have capital AM/PM<br>
+
     </div>
 """, unsafe_allow_html=True)
 
@@ -98,6 +97,8 @@ if uploaded_file is not None:
     data = uploaded_file.read().decode("utf-8")
     df = PreProcessData(data,os,time_format)
     df=pd.DataFrame(df)
+    total_messages = df.shape[0]
+    st.subheader(f"Total Mesaages: "{total_messages})
     st.subheader("Number of Messages Over Time")
     message_counts = df.groupby(df["Date"].dt.date).size()
     plt.figure(figsize=(12, 6))
