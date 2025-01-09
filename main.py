@@ -13,31 +13,31 @@ import seaborn as sns
 # nltk.download("punkt")
 # nltk.download("stopwords")
 
-def PreProcessData(data, os_type,time_format):
+
+ def PreProcessData(data, os_type, time_format):
     if os_type == "Apple":
-        if time_format=="24 Hours":
+        if time_format == "24 Hours":
             pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
             df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S] ')
-        if time_format=="12 Hours":
+        elif time_format == "12 Hours":
             pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\s(?:AM|PM)\]\s'
-                
+
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
             df["Date"] = pd.to_datetime(dates, format='[%d/%m/%y, %H:%M:%S %p] ')
-    if os_type == "Android":
-        if time_format == "24 hours":
-            pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+    elif os_type == "Android":
+        if time_format == "24 Hours":
+            pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s-\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
-            df["Date"] = pd.to_datetime(dates, format='[%m/%d/%y, %H:%M:%S] ')
-        if time_format == "12 hours":
-            pattern = r'\[\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}:\d{1,2}\]\s'
+            df["Date"] = pd.to_datetime(dates, format='%d/%m/%y, %H:%M - ')
+        elif time_format == "12 Hours":
+            pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{1,2}\s(?:am|pm)\s-\s'
             df = pd.DataFrame({"User Message": re.split(pattern, data)[1:]})
             dates = re.findall(pattern, data)
-            df["Date"] = pd.to_datetime(dates, format='[%m/%d/%y, %H:%M:%S] ')
-
+            df["Date"] = pd.to_datetime(dates, format='%d/%m/%y, %H:%M %p - ')
 
     users = []
     messages = []
@@ -59,29 +59,8 @@ def PreProcessData(data, os_type,time_format):
     df["Day"] = df["Date"].dt.day
     df["Hour"] = df["Date"].dt.hour
     df["Minute"] = df["Date"].dt.minute
-    return df
-
-    users = []
-    messages = []
-    for message in df["User Message"]:
-        entry = re.split(r'([\w\W]+?):\s', message)
-        if entry[1:]:
-            users.append(entry[1])
-            messages.append(entry[2])
-        else:
-            users.append('group_notification')
-            messages.append(entry[0])
-    df['user'] = users
-    df['message'] = messages
-    df.drop(columns=["User Message"], inplace=True)
-
-    # Extract datetime components
-    df["Year"] = df["Date"].dt.year
-    df["Month"] = df["Date"].dt.month
-    df["Day"] = df["Date"].dt.day
-    df["Hour"] = df["Date"].dt.hour
-    df["Minute"] = df["Date"].dt.minute
-    return df
+    return df      
+  
 
 
 st.title("WhatsApp Chat Analyzer")
