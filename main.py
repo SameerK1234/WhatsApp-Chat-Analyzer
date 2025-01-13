@@ -161,6 +161,19 @@ if uploaded_file is not None:
     st.subheader(f"Most used emoji is:{max_emoji[0]}")
     st.subheader(f"Total usage:{max_emoji[1]}")
 
+    st.subheader("Media Links")
+    def get_url(text):
+        pattern = r'https?://\S+|www\.\S+'
+        return re.findall(pattern,text)
+    all_text = "".join(df["message"].astype(str))
+    urls = get_url(all_text)
+    url_list = []
+    for url in urls:
+        url_list.append(url)
+    url_len = len(url_list)
+    st.subheader(f"Total link shared: {len_url}")
+    st.write(url_list)
+
 
 else:
 
