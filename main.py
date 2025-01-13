@@ -171,7 +171,7 @@ if uploaded_file is not None:
     for url in urls:
         url_list.append(url)
     url_len = len(url_list)
-    st.subheader(f"Total link shared: {len_url}")
+    st.subheader(f"Total link shared: {url_len}")
     st.write(url_list)
 
 
