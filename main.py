@@ -207,12 +207,10 @@ if uploaded_file is not None:
         else:
             continue
     abb_no_of_times = Counter(abbreviations_used)
-    x = abb_no_of_times.keys()
-    y = abb_no_of_times.values()
-    abb = pd.DataFrame({
-                   "Abbreviations":x,
-                   "Number of times used":y  
-    })
+    abb_no_of_times=sorted(abb_no_of_times.items(),key=lambda x:x[1],reverse=True)
+    # x = abb_no_of_times.keys()
+    # y = abb_no_of_times.values()
+    abb = pd.DataFrame(abb_no_of_times,columns=["Abbreviations","Number of times used"])
     st.dataframe(abb)
             
     import emoji
