@@ -120,18 +120,18 @@ if uploaded_file is not None:
     plt.tight_layout()
     st.pyplot(plt)
 
-    # st.subheader("Word Cloud")
-    # all_test = "".join(df["message"].astype(str))
-    # tokenizer = word_tokenize(all_test)
-    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
-    # text = Counter(filtered_words)
-    # text.pop("Media")
-    # text.pop("omitted")
-    # word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
-    # plt.figure(figsize=(12, 6))
-    # plt.imshow(word_cloud)
-    # plt.axis("off")
-    # st.pyplot(plt)
+    st.subheader("Word Cloud")
+    all_test = "".join(df["message"].astype(str))
+    tokenizer = all_test.split()
+    filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
+    text = Counter(filtered_words)
+    text.pop("Media")
+    text.pop("omitted")
+    word_cloud = WordCloud(height=800, width=1600).generate_from_frequencies(text)
+    plt.figure(figsize=(12, 6))
+    plt.imshow(word_cloud)
+    plt.axis("off")
+    st.pyplot(plt)
 
     df['DayOfWeek'] = df['Date'].dt.dayofweek
     heatmap_data = df.groupby(['DayOfWeek', 'Hour']).size().unstack(fill_value=0)
@@ -144,6 +144,77 @@ if uploaded_file is not None:
     plt.yticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=0)
     st.pyplot(plt)
 
+    st.subhead("Abbreviations")
+    full_forms ={
+    # General Abbreviations
+    "ASAP": "As Soon As Possible",
+    "DIY": "Do It Yourself",
+    "FYI": "For Your Information",
+    "ETA": "Estimated Time of Arrival",
+    "IDK": "I Don't Know",
+    "LOL": "Laugh Out Loud",
+    "OMG": "Oh My God",
+    "TBA": "To Be Announced",
+    "TBD": "To Be Decided/Determined",
+    "BRB": "Be Right Back",
+
+    # Business and Technology
+    "CEO": "Chief Executive Officer",
+    "CFO": "Chief Financial Officer",
+    "CTO": "Chief Technology Officer",
+    "IT": "Information Technology",
+    "AI": "Artificial Intelligence",
+    "ML": "Machine Learning",
+    "IoT": "Internet of Things",
+    "API": "Application Programming Interface",
+    "HTTP": "Hypertext Transfer Protocol",
+    "URL": "Uniform Resource Locator",
+
+    # Government and Organizations
+    "UN": "United Nations",
+    "WHO": "World Health Organization",
+    "IMF": "International Monetary Fund",
+
+    # Slangs
+    "BFF": "Best Friends Forever",
+    "TTYL": "Talk To You Later",
+    "ROFL": "Rolling On the Floor Laughing",
+    "SMH": "Shaking My Head",
+    "IMO": "In My Opinion",
+    "IRL": "In Real Life",
+    "TBH": "To Be Honest",
+    "NSFW": "Not Safe For Work",
+    "FOMO": "Fear Of Missing Out",
+    "YOLO": "You Only Live Once",
+    "TMI": "Too Much Information",
+    "IDC": "I Don’t Care",
+    "ILY": "I Love You",
+    "LMAO": "Laughing My Ass Off",
+    "HBU": "How About You",
+    "GG": "Good Game",
+    "AFK": "Away From Keyboard",
+    "ICYMI": "In Case You Missed It",
+    "BTW": "By The Way",
+    "JK": "Just Kidding",
+    "WTF":"What the fuck"
+}
+    all_text = "".join(df["message"].astype(str))
+    all_text = all_text.split()
+    abbreviations_used = []
+    for char in all_text:
+        if char.upper() in full_forms:
+            abbreviations_used.append(full_forms[char.upper()])
+        else:
+            continue
+    abb_no_of_times = Counter(abbreviations_used)
+    x = abb_no_of_times.keys()
+    y = abb_no_of_times.values()
+    abb = pd.DataFrame({
+                   "Abbreviations":x,
+                   "Number of times used":y  
+    })
+    st.dataframe(abb)
+            
     import emoji
     st.subheader("Emoji")
     all_test = "".join(df["message"].astype(str))
