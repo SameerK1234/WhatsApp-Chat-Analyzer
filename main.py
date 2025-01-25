@@ -144,7 +144,7 @@ if uploaded_file is not None:
     plt.yticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=0)
     st.pyplot(plt)
 
-    st.subhead("Abbreviations")
+    st.subheader("Abbreviations")
     full_forms ={
     # General Abbreviations
     "ASAP": "As Soon As Possible",
