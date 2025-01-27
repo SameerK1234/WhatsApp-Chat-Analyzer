@@ -25,7 +25,3 @@ The project uses libraries like `Streamlit`, `pandas`, `matplotlib`, `seaborn`, 
   - `wordcloud`
   - `emoji`
 
-Install the required libraries using the following command:
-```bash
-pip install -r requirements.txt
-
