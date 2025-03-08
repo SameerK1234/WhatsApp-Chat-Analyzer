@@ -96,6 +96,7 @@ if uploaded_file is not None:
     data = uploaded_file.read().decode("utf-8")
     df = PreProcessData(data,os,time_format)
     df=pd.DataFrame(df)
+    st.dataframe(df)
     total_messages = df.shape[0]
     st.subheader(f"Total Messages: {total_messages}")
     st.subheader("Number of Messages Over Time")
