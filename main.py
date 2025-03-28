@@ -173,7 +173,6 @@ if uploaded_file is not None:
 
     # Government and Organizations
     "UN": "United Nations",
-    "WHO": "World Health Organization",
     "IMF": "International Monetary Fund",
 
     # Slangs
