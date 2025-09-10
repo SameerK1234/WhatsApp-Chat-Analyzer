@@ -134,8 +134,8 @@ if uploaded_file is not None:
     # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
     filtered_words = []
     for word in tokenizer:
-    if word.isalpha() and word.lower() not in stop_words:
-        filtered_words.append(word)
+        if word.isalpha() and word.lower() not in stop_words:
+            filtered_words.append(word)
     text = Counter(filtered_words)
     # text.pop("Media")
     # text.pop("omitted")
@@ -258,4 +258,5 @@ if uploaded_file is not None:
 else:
 
      st.write("Please upload a WhatsApp chat file to analyze.")
+
 
