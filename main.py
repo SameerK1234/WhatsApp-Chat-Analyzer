@@ -86,7 +86,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-
+stop_words = {
+    'i','me','my','myself','we','our','ours','ourselves','you','your','yours',
+    'yourself','yourselves','he','him','his','himself','she','her','hers','herself',
+    'it','its','itself','they','them','their','theirs','themselves','what','which',
+    'who','whom','this','that','these','those','am','is','are','was','were','be','been','being',
+    'have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while'
+    # you can add more
+}
 
 st.title("WhatsApp Chat Analyzer")
 os = st.selectbox("Operating System",["Apple", "Android"])
@@ -124,7 +131,11 @@ if uploaded_file is not None:
     st.subheader("Word Cloud")
     all_test = "".join(df["message"].astype(str))
     tokenizer = all_test.split()
-    filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
+    # filtered_words = [word for word in tokenizer if word.isalpha() and word not in stopwords.words('english')]
+    filtered_words = []
+    for word in tokenizer:
+    if word.isalpha() and word.lower() not in stop_words:
+        filtered_words.append(word)
     text = Counter(filtered_words)
     # text.pop("Media")
     # text.pop("omitted")
@@ -247,3 +258,4 @@ if uploaded_file is not None:
 else:
 
      st.write("Please upload a WhatsApp chat file to analyze.")
+
