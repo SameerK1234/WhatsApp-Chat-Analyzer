@@ -9,8 +9,8 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import seaborn as sns
-nltk.download("stopwords")
-from nltk.corpus import stopwords
+# nltk.download("stopwords")
+# from nltk.corpus import stopwords
 # nltk.download("punkt")
 
 # Function to preprocess WhatsApp chat data
@@ -258,5 +258,6 @@ if uploaded_file is not None:
 else:
 
      st.write("Please upload a WhatsApp chat file to analyze.")
+
 
 
