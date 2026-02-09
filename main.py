@@ -101,12 +101,21 @@ time_format = st.selectbox("Time Format",["12 Hours","24 Hours"])
 uploaded_file = st.file_uploader("Upload your WhatsApp chat file (.txt)", type="txt")
 if uploaded_file is not None:
     data = uploaded_file.read().decode("utf-8")
-    df = PreProcessData(data,os,time_format)
-    df=pd.DataFrame(df)
+    df = PreProcessData(data, os, time_format)
+    df = pd.DataFrame(df)
+    
+    for col in df.columns:
+        if df[col].dtype == "object":
+            df[col] = df[col].astype(str)
+
     st.dataframe(df)
+
     total_messages = df.shape[0]
+
     st.subheader(f"Total Messages: {total_messages}")
+    
     st.subheader("Number of Messages Over Time")
+    
     message_counts = df.groupby(df["Date"].dt.date).size()
     plt.figure(figsize=(12, 6))
     plt.plot(message_counts.index, message_counts.values, color="blue")
@@ -258,6 +267,7 @@ if uploaded_file is not None:
 else:
 
      st.write("Please upload a WhatsApp chat file to analyze.")
+
 
 
 
