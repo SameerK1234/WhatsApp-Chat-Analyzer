@@ -1,6 +1,7 @@
 pandas
 matplotlib
 streamlit 
+altair==4.2.2
 wordcloud
 nltk==3.9.1
 seaborn
