@@ -9,7 +9,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import seaborn as sns
-st.set_option("global.disableArrow", True)
+
 
 # nltk.download("stopwords")
 # from nltk.corpus import stopwords
@@ -110,7 +110,7 @@ if uploaded_file is not None:
         if df[col].dtype == "object":
             df[col] = df[col].astype(str)
 
-    st.dataframe(df)
+    st.table(df.astype(str))
 
     total_messages = df.shape[0]
 
@@ -233,7 +233,7 @@ if uploaded_file is not None:
     # x = abb_no_of_times.keys()
     # y = abb_no_of_times.values()
     abb = pd.DataFrame(abb_no_of_times,columns=["Abbreviations","Number of times used"])
-    st.dataframe(abb)
+    st.table(abb.astype(str))
             
     import emoji
     st.subheader("Emoji")
@@ -263,12 +263,13 @@ if uploaded_file is not None:
         url_list.append(url)
     url_len = len(url_list)
     st.subheader(f"Total link shared: {url_len}")
-    st.write(url_list)
+    st.text("".join(url_list[:300]))
 
 
 else:
 
      st.write("Please upload a WhatsApp chat file to analyze.")
+
 
 
 
